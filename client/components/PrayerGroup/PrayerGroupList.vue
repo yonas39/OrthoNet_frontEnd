@@ -4,7 +4,16 @@ import PrayerGroupForm from "./PrayerGroupForm.vue";
 import PrayerGroupComponent from "./PrayerGroupComponent.vue";
 import { fetchy } from "../../utils/fetchy";
 
-const groups = ref([]);
+// const groups = ref([]);
+// const loaded = ref(false);
+interface PrayerGroup {
+  _id: string;
+  title: string;
+  topic: string;
+  members: string[];
+}
+
+const groups = ref<PrayerGroup[]>([]); // Use correct type here
 const loaded = ref(false);
 
 const getGroups = async () => {

@@ -48,7 +48,7 @@ import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 
-const { userId } = storeToRefs(useUserStore()); // Fetch the current user ID
+const { currentUsername } = storeToRefs(useUserStore()); // Fetch the current user ID
 const emit = defineEmits(["refreshGroups"]);
 
 const form = reactive({
@@ -57,7 +57,7 @@ const form = reactive({
   startTime: "",
   endTime: "",
   NumParticipants: 0,
-  active: false,
+  // active: false,
   loading: false,
   errorMessage: "",
   successMessage: "",
@@ -72,7 +72,7 @@ const createGroup = async () => {
   form.successMessage = "";
   form.startTime = new Date(form.startTime).toISOString();
   form.endTime = new Date(form.endTime).toISOString();
-  form.active = true;
+  // form.active = true;
   try {
     await fetchy("/api/prayer/groups", "POST", {
       body: {
@@ -121,8 +121,8 @@ const clearForm = () => {
       <input v-model="form.startTime" type="datetime-local" placeholder="Start Time" required />
       <input v-model="form.endTime" type="datetime-local" placeholder="End Time" required />
       <input v-model="form.NumParticipants" type="number" placeholder="Number of Participants" required />
-      <label for="active">Active:</label>
-      <input v-model="form.active" type="checkbox" placeholder="Active" required />
+      <!-- <label for="active">Active:</label>
+      <input v-model="form.active" type="checkbox" placeholder="Active" required /> -->
 
       <button type="submit" class="pure-button pure-button-primary" :disabled="form.loading">
         {{ form.loading ? "Creating..." : "Create Group" }}
