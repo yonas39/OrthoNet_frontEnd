@@ -2,6 +2,7 @@ import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
+import PrayerMate from "../components/PrayerGroup/PrayerMate.vue"; // Import PrayerMate view
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
@@ -37,6 +38,13 @@ const router = createRouter({
       path: "/:catchAll(.*)",
       name: "not-found",
       component: NotFoundView,
+    },
+    {
+      path: "/prayermate",
+      name: "PrayerMate",
+      component: PrayerMate,
+      // meta: { requiresAuth: true }, // Optional: require login to access PrayerMate
+      meta: { requiresAuth: false }, // Optional: require login to access PrayerMate
     },
   ],
 });
