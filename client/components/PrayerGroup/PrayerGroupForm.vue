@@ -78,7 +78,7 @@ const createGroup = async () => {
       body: {
         title: form.title,
         topic: form.topic,
-        leader: userId.value, // Set the leader as the current user
+        leader: currentUsername.value, // Set the leader as the current user
       },
     });
 
