@@ -118,6 +118,12 @@ export default class PrayerMate {
     return { msg: `User ${user} has left the group ${groupID}.` };
   }
 
+  // Get all prayer groups
+  async getAllPrayerGroups() {
+    const groups = await this.groups.readMany({});
+    return groups;
+  }
+
   // Get group members
   async getGroupMembers(groupID: ObjectId): Promise<ObjectId[]> {
     const group = await this.groups.readOne({ _id: groupID });

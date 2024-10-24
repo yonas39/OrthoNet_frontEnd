@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 import { getExpressRouter, Router } from "./framework/router";
 
-import { Authing, BibleQuiz, Eventing, Following, Friending, Posting, prayerMate, Sessioning, Touring } from "./app";
+import { Authing, Eventing, Following, Friending, Posting, prayerMate, Quizing, Sessioning, Touring } from "./app";
 import { PostOptions } from "./concepts/posting";
 import { SessionDoc } from "./concepts/sessioning";
 import Responses from "./responses";
@@ -247,142 +247,78 @@ class Routes {
 
   //   return await Quizing.createQuiz(title, quizQuestions, user); // Use user as the creator
   // }
-
-  // Get all quizzes
-  @Router.get("/quizzes")
-  async getQuizzes() {
-    return await BibleQuiz.getQuizzes();
-  }
-
-  // Get a specific quiz by ID
-  @Router.get("/quizzes/:id")
-  @Router.validate(z.object({ id: z.string() }))
-  async getQuiz(id: string) {
-    const quizID = new ObjectId(id);
-    return await BibleQuiz.getQuiz(quizID);
-  }
-
-  // Create a new quiz
   @Router.post("/quizzes")
-  @Router.validate(
-    z.object({
-      title: z.string().min(1),
-      creator: z.string(),
-      questions: z.array(
-        z.object({
-          questionID: z.number(),
-          questionText: z.string(),
-          correctAnswer: z.string(),
-        }),
-      ),
-    }),
-  )
-  async createQuiz({ title, creator, questions }: { title: string; creator: string; questions: any }) {
-    const creatorID = new ObjectId(creator);
-    return await BibleQuiz.createQuiz(title, questions, creatorID);
+  async createQuiz(session: SessionDoc, title: string, questions: any) {
+    const user = Sessioning.getUser(session);
+
+    // Check if 'questions' is already an array or a string
+    let quizQuestions;
+    if (typeof questions === "string") {
+      // Try parsing it if it's a string (this could happen if questions are sent as a JSON string)
+      try {
+        quizQuestions = JSON.parse(questions);
+      } catch (e) {
+        return { msg: "Invalid format for questions. It must be a valid JSON array." };
+      }
+    } else if (Array.isArray(questions)) {
+      quizQuestions = questions;
+    } else {
+      return { msg: "Questions must be an array or a valid JSON string." };
+    }
+
+    // Now ensure that each question has the required structure
+    quizQuestions = quizQuestions.map((q: { questionText: string; correctAnswer: string }, index: number) => {
+      if (!q.questionText || !q.correctAnswer) {
+        throw new Error("Each question must have 'questionText' and 'correctAnswer'");
+      }
+      return {
+        questionID: index + 1,
+        questionText: q.questionText,
+        correctAnswer: q.correctAnswer,
+      };
+    });
+
+    return await Quizing.createQuiz(title, quizQuestions, user); // Use user._id as the creator
   }
 
-  // Start a quiz for a user
-  @Router.post("/quizzes/:id/start")
-  @Router.validate(z.object({ id: z.string(), user: z.string() }))
-  async startQuiz(id: string, user: string) {
-    const quizID = new ObjectId(id);
-    const userID = new ObjectId(user);
-    return await BibleQuiz.startQuiz(userID, quizID);
+  @Router.post("/quizzes/:quizID/start")
+  async startQuiz(session: SessionDoc, quizID: string) {
+    const user = Sessioning.getUser(session);
+    return await Quizing.startQuiz(user, new ObjectId(quizID)); // Use user
   }
 
-  // Answer a quiz question
-  @Router.post("/quizzes/:id/questions/:questionID/answer")
-  @Router.validate(
-    z.object({
-      id: z.string(),
-      questionID: z.number(),
-      user: z.string(),
-      selectedAnswer: z.string().min(1),
-    }),
-  )
-  async answerQuestion({ id, questionID, user, selectedAnswer }: { id: string; questionID: number; user: string; selectedAnswer: string }) {
-    const quizID = new ObjectId(id);
-    const userID = new ObjectId(user);
-    return await BibleQuiz.answerQuestion(userID, quizID, questionID, selectedAnswer);
+  @Router.post("/quizzes/:quizID/answer/:questionID")
+  async answerQuestion(session: SessionDoc, quizID: string, questionID: string, selectedAnswer: string) {
+    const user = Sessioning.getUser(session);
+    return await Quizing.answerQuestion(user, new ObjectId(quizID), Number(questionID), selectedAnswer);
   }
 
-  // Get quiz leaderboard
-  @Router.get("/quizzes/:id/leaderboard")
-  @Router.validate(z.object({ id: z.string() }))
-  async getQuizLeaderboard(id: string) {
-    const quizID = new ObjectId(id);
-    return await BibleQuiz.getQuizLeaderboard(quizID);
+  @Router.get("/quizzes/:quizID/progress")
+  async getPlayerProgress(session: SessionDoc, quizID: string) {
+    const user = Sessioning.getUser(session);
+    return await Quizing.getPlayerProgress(new ObjectId(quizID), user); // Use user
   }
 
-  // Get player progress on a quiz
-  @Router.get("/quizzes/:id/progress/:user")
-  @Router.validate(z.object({ id: z.string(), user: z.string() }))
-  async getPlayerProgress(id: string, user: string) {
-    const quizID = new ObjectId(id);
-    const userID = new ObjectId(user);
-    return await BibleQuiz.getPlayerProgress(quizID, userID);
+  @Router.get("/quizzes/:quizID/leaderboard")
+  async viewQuizLeaderboard(session: SessionDoc, quizID: string) {
+    return await Quizing.getQuizLeaderboard(new ObjectId(quizID));
   }
-
-  // @Router.post("/quizzes")
-  // async createQuiz(session: SessionDoc, title: string, questions: any) {
-  //   const user = Sessioning.getUser(session);
-
-  //   // Check if 'questions' is already an array or a string
-  //   let quizQuestions;
-  //   if (typeof questions === "string") {
-  //     // Try parsing it if it's a string (this could happen if questions are sent as a JSON string)
-  //     try {
-  //       quizQuestions = JSON.parse(questions);
-  //     } catch (e) {
-  //       return { msg: "Invalid format for questions. It must be a valid JSON array." };
-  //     }
-  //   } else if (Array.isArray(questions)) {
-  //     quizQuestions = questions;
-  //   } else {
-  //     return { msg: "Questions must be an array or a valid JSON string." };
-  //   }
-
-  //   // Now ensure that each question has the required structure
-  //   quizQuestions = quizQuestions.map((q: { questionText: string; correctAnswer: string }, index: number) => {
-  //     if (!q.questionText || !q.correctAnswer) {
-  //       throw new Error("Each question must have 'questionText' and 'correctAnswer'");
-  //     }
-  //     return {
-  //       questionID: index + 1,
-  //       questionText: q.questionText,
-  //       correctAnswer: q.correctAnswer,
-  //     };
-  //   });
-
-  //   return await Quizing.createQuiz(title, quizQuestions, user); // Use user._id as the creator
-  // }
-
-  // @Router.post("/quizzes/:quizID/start")
-  // async startQuiz(session: SessionDoc, quizID: string) {
-  //   const user = Sessioning.getUser(session);
-  //   return await Quizing.startQuiz(user, new ObjectId(quizID)); // Use user
-  // }
-
-  // @Router.post("/quizzes/:quizID/answer/:questionID")
-  // async answerQuestion(session: SessionDoc, quizID: string, questionID: string, selectedAnswer: string) {
-  //   const user = Sessioning.getUser(session);
-  //   return await Quizing.answerQuestion(user, new ObjectId(quizID), Number(questionID), selectedAnswer);
-  // }
-
-  // @Router.get("/quizzes/:quizID/progress")
-  // async getPlayerProgress(session: SessionDoc, quizID: string) {
-  //   const user = Sessioning.getUser(session);
-  //   return await Quizing.getPlayerProgress(new ObjectId(quizID), user); // Use user
-  // }
-
-  // @Router.get("/quizzes/:quizID/leaderboard")
-  // async viewQuizLeaderboard(session: SessionDoc, quizID: string) {
-  //   return await Quizing.getQuizLeaderboard(new ObjectId(quizID));
-  // }
 
   // PRAYER MATE
   // Prayer group and session routes
+  // Get all prayer groups
+  @Router.get("/prayer-groups")
+  async getAllPrayerGroups() {
+    const groups = await prayerMate.getAllPrayerGroups();
+    return { msg: "All prayer groups", groups };
+  }
+
+  @Router.get("/prayer/:groupID")
+  async getPrayerGroups(session: SessionDoc, groupID: string) {
+    const groupOid = new ObjectId(groupID);
+    const groups = await prayerMate.getPrayerGroup(groupOid);
+    return groups;
+  }
 
   // Create a new prayer group
   @Router.post("/prayer-group")
@@ -596,167 +532,3 @@ export const app = new Routes();
 
 /** The Express router. */
 export const appRouter = getExpressRouter(app);
-
-//////////////////////// OLD CODE ////////////////////////
-
-// import { ObjectId } from "mongodb";
-
-// import { Router, getExpressRouter } from "./framework/router";
-
-// import { Authing, Friending, Posting, Sessioning } from "./app";
-// import { PostOptions } from "./concepts/posting";
-// import { SessionDoc } from "./concepts/sessioning";
-// import Responses from "./responses";
-
-// import { z } from "zod";
-
-// /**
-//  * Web server routes for the app. Implements synchronizations between concepts.
-//  */
-// class Routes {
-//   // Synchronize the concepts from `app.ts`.
-
-//   @Router.get("/session")
-//   async getSessionUser(session: SessionDoc) {
-//     const user = Sessioning.getUser(session);
-//     return await Authing.getUserById(user);
-//   }
-
-//   @Router.get("/users")
-//   async getUsers() {
-//     return await Authing.getUsers();
-//   }
-
-//   @Router.get("/users/:username")
-//   @Router.validate(z.object({ username: z.string().min(1) }))
-//   async getUser(username: string) {
-//     return await Authing.getUserByUsername(username);
-//   }
-
-//   @Router.post("/users")
-//   async createUser(session: SessionDoc, username: string, password: string) {
-//     Sessioning.isLoggedOut(session);
-//     return await Authing.create(username, password);
-//   }
-
-//   @Router.patch("/users/username")
-//   async updateUsername(session: SessionDoc, username: string) {
-//     const user = Sessioning.getUser(session);
-//     return await Authing.updateUsername(user, username);
-//   }
-
-//   @Router.patch("/users/password")
-//   async updatePassword(session: SessionDoc, currentPassword: string, newPassword: string) {
-//     const user = Sessioning.getUser(session);
-//     return Authing.updatePassword(user, currentPassword, newPassword);
-//   }
-
-//   @Router.delete("/users")
-//   async deleteUser(session: SessionDoc) {
-//     const user = Sessioning.getUser(session);
-//     Sessioning.end(session);
-//     return await Authing.delete(user);
-//   }
-
-//   @Router.post("/login")
-//   async logIn(session: SessionDoc, username: string, password: string) {
-//     const u = await Authing.authenticate(username, password);
-//     Sessioning.start(session, u._id);
-//     return { msg: "Logged in!" };
-//   }
-
-//   @Router.post("/logout")
-//   async logOut(session: SessionDoc) {
-//     Sessioning.end(session);
-//     return { msg: "Logged out!" };
-//   }
-
-//   @Router.get("/posts")
-//   @Router.validate(z.object({ author: z.string().optional() }))
-//   async getPosts(author?: string) {
-//     let posts;
-//     if (author) {
-//       const id = (await Authing.getUserByUsername(author))._id;
-//       posts = await Posting.getByAuthor(id);
-//     } else {
-//       posts = await Posting.getPosts();
-//     }
-//     return Responses.posts(posts);
-//   }
-
-//   @Router.post("/posts")
-//   async createPost(session: SessionDoc, content: string, options?: PostOptions) {
-//     const user = Sessioning.getUser(session);
-//     const created = await Posting.create(user, content, options);
-//     return { msg: created.msg, post: await Responses.post(created.post) };
-//   }
-
-//   @Router.patch("/posts/:id")
-//   async updatePost(session: SessionDoc, id: string, content?: string, options?: PostOptions) {
-//     const user = Sessioning.getUser(session);
-//     const oid = new ObjectId(id);
-//     await Posting.assertAuthorIsUser(oid, user);
-//     return await Posting.update(oid, content, options);
-//   }
-
-//   @Router.delete("/posts/:id")
-//   async deletePost(session: SessionDoc, id: string) {
-//     const user = Sessioning.getUser(session);
-//     const oid = new ObjectId(id);
-//     await Posting.assertAuthorIsUser(oid, user);
-//     return Posting.delete(oid);
-//   }
-
-//   @Router.get("/friends")
-//   async getFriends(session: SessionDoc) {
-//     const user = Sessioning.getUser(session);
-//     return await Authing.idsToUsernames(await Friending.getFriends(user));
-//   }
-
-//   @Router.delete("/friends/:friend")
-//   async removeFriend(session: SessionDoc, friend: string) {
-//     const user = Sessioning.getUser(session);
-//     const friendOid = (await Authing.getUserByUsername(friend))._id;
-//     return await Friending.removeFriend(user, friendOid);
-//   }
-
-//   @Router.get("/friend/requests")
-//   async getRequests(session: SessionDoc) {
-//     const user = Sessioning.getUser(session);
-//     return await Responses.friendRequests(await Friending.getRequests(user));
-//   }
-
-//   @Router.post("/friend/requests/:to")
-//   async sendFriendRequest(session: SessionDoc, to: string) {
-//     const user = Sessioning.getUser(session);
-//     const toOid = (await Authing.getUserByUsername(to))._id;
-//     return await Friending.sendRequest(user, toOid);
-//   }
-
-//   @Router.delete("/friend/requests/:to")
-//   async removeFriendRequest(session: SessionDoc, to: string) {
-//     const user = Sessioning.getUser(session);
-//     const toOid = (await Authing.getUserByUsername(to))._id;
-//     return await Friending.removeRequest(user, toOid);
-//   }
-
-//   @Router.put("/friend/accept/:from")
-//   async acceptFriendRequest(session: SessionDoc, from: string) {
-//     const user = Sessioning.getUser(session);
-//     const fromOid = (await Authing.getUserByUsername(from))._id;
-//     return await Friending.acceptRequest(fromOid, user);
-//   }
-
-//   @Router.put("/friend/reject/:from")
-//   async rejectFriendRequest(session: SessionDoc, from: string) {
-//     const user = Sessioning.getUser(session);
-//     const fromOid = (await Authing.getUserByUsername(from))._id;
-//     return await Friending.rejectRequest(fromOid, user);
-//   }
-// }
-
-// /** The web app. */
-// export const app = new Routes();
-
-// /** The Express router. */
-// export const appRouter = getExpressRouter(app);

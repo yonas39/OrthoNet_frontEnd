@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
+import { defineEmits, defineProps } from "vue";
 import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["group"]);
@@ -7,7 +7,7 @@ const emit = defineEmits(["refreshGroups"]);
 
 const startSession = async () => {
   try {
-    await fetchy(`/api/prayer/groups/${props.group._id}/start-session`, "POST");
+    await fetchy(`/api/prayer-session/start/${props.group._id}`, "POST");
     emit("refreshGroups");
   } catch (error) {
     console.error("Failed to start session:", error);
@@ -16,7 +16,7 @@ const startSession = async () => {
 
 const endSession = async () => {
   try {
-    await fetchy(`/api/prayer/groups/${props.group._id}/end-session`, "POST");
+    await fetchy(`/api/prayer-session/end/${props.group._id}`, "PUT");
     emit("refreshGroups");
   } catch (error) {
     console.error("Failed to end session:", error);

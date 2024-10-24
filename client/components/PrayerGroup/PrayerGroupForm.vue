@@ -1,128 +1,88 @@
-<!-- <script setup lang="ts">
-import { ref } from "vue";
-import { fetchy } from "../../utils/fetchy";
-const title = ref("");
-const topic = ref("");
-const emit = defineEmits(["refreshGroups"]);
-
-const createGroup = async () => {
-  try {
-    await fetchy("/api/prayer/groups", "POST", {
-      body: { title: title.value, topic: topic.value },
-    });
-    emit("refreshGroups");
-    clearForm();
-  } catch (error) {
-    console.error("Failed to create group:", error);
-  }
-};
-
-const clearForm = () => {
-  title.value = "";
-  topic.value = "";
-};
-</script>
-
-<template>
-  <form @submit.prevent="createGroup" class="pure-form">
-    <fieldset>
-      <legend>Create Prayer Group</legend>
-      <input v-model="title" placeholder="Group Title" required />
-      <input v-model="topic" placeholder="Group Topic" required />
-      <button type="submit" class="pure-button pure-button-primary">Create Group</button>
-    </fieldset>
-  </form>
-</template>
-
-<style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-}
-</style> -->
-
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { useUserStore } from "@/stores/user"; // Import the store
 import { fetchy } from "@/utils/fetchy";
-import { storeToRefs } from "pinia";
-import { useUserStore } from "@/stores/user";
+import { ref } from "vue";
 
-const { currentUsername } = storeToRefs(useUserStore()); // Fetch the current user ID
+// Access the username directly from the user store
+const userStore = useUserStore();
 const emit = defineEmits(["refreshGroups"]);
 
-const form = reactive({
+// Form data for group creation
+const form = ref({
   title: "",
   topic: "",
   startTime: "",
   endTime: "",
   NumParticipants: 0,
-  // active: false,
   loading: false,
   errorMessage: "",
   successMessage: "",
 });
 
-// Form submission logic
+// Function to create a group and store it in MongoDB via the backend
 const createGroup = async () => {
   if (!validateForm()) return;
 
-  form.loading = true;
-  form.errorMessage = "";
-  form.successMessage = "";
-  form.startTime = new Date(form.startTime).toISOString();
-  form.endTime = new Date(form.endTime).toISOString();
-  // form.active = true;
+  form.value.loading = true;
+  form.value.errorMessage = "";
+  form.value.successMessage = "";
+  form.value.startTime = new Date(form.value.startTime).toISOString();
+  form.value.endTime = new Date(form.value.endTime).toISOString();
+
   try {
-    await fetchy("/api/prayer/groups", "POST", {
+    // Send request to backend API to create the prayer group
+    await fetchy("/api/prayer-group", "POST", {
       body: {
-        title: form.title,
-        topic: form.topic,
-        leader: currentUsername.value, // Set the leader as the current user
+        title: form.value.title,
+        topic: form.value.topic,
+        leader: userStore.currentUsername, // Access username directly
+        startTime: form.value.startTime,
+        endTime: form.value.endTime,
+        NumParticipants: form.value.NumParticipants,
       },
     });
 
-    form.successMessage = "Prayer group created successfully!";
-    emit("refreshGroups"); // Refresh the group list
-    clearForm();
+    form.value.successMessage = "Prayer group created successfully!";
+    emit("refreshGroups"); // Trigger a refresh if needed
+    clearForm(); // Reset form after successful submission
   } catch (error) {
-    form.errorMessage = "Failed to create the group. Please try again.";
+    form.value.errorMessage = "Failed to create the group. Please try again.";
     console.error("Error creating group:", error);
   } finally {
-    form.loading = false;
+    form.value.loading = false;
   }
 };
 
-// Validate the form inputs
+// Validate that all required fields are filled
 const validateForm = () => {
-  if (!form.title || !form.topic) {
-    form.errorMessage = "Both title and topic are required.";
+  if (!form.value.title || !form.value.topic || !form.value.startTime || !form.value.endTime || form.value.NumParticipants <= 0) {
+    form.value.errorMessage = "All fields are required, and participants must be at least 1.";
     return false;
   }
   return true;
 };
 
-// Clear the form inputs
+// Clear the form after successful submission
 const clearForm = () => {
-  form.title = "";
-  form.topic = "";
-  form.startTime = "";
-  form.endTime = "";
+  form.value.title = "";
+  form.value.topic = "";
+  form.value.startTime = "";
+  form.value.endTime = "";
+  form.value.NumParticipants = 0;
 };
 </script>
 
 <template>
   <form @submit.prevent="createGroup" class="pure-form">
     <fieldset>
+      <h1>Create Prayer Group</h1>
       <legend>Create Prayer Group</legend>
 
       <input v-model="form.title" placeholder="Group Title" required />
       <input v-model="form.topic" placeholder="Group Topic" required />
       <input v-model="form.startTime" type="datetime-local" placeholder="Start Time" required />
       <input v-model="form.endTime" type="datetime-local" placeholder="End Time" required />
-      <input v-model="form.NumParticipants" type="number" placeholder="Number of Participants" required />
-      <!-- <label for="active">Active:</label>
-      <input v-model="form.active" type="checkbox" placeholder="Active" required /> -->
+      <input v-model.number="form.NumParticipants" type="number" placeholder="Number of Participants" min="1" required />
 
       <button type="submit" class="pure-button pure-button-primary" :disabled="form.loading">
         {{ form.loading ? "Creating..." : "Create Group" }}
@@ -143,24 +103,107 @@ form {
   margin: 0 auto;
 }
 
-input {
-  padding: 0.5em;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-}
-
-button {
-  margin-top: 1em;
-}
-
 .error {
   color: red;
-  font-size: 0.9em;
 }
 
 .success {
   color: green;
-  font-size: 0.9em;
 }
 </style>
+
+<!-- <script setup lang="ts">
+import { useUserStore } from "@/stores/user";
+import { fetchy } from "@/utils/fetchy";
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+
+const { currentUsername } = storeToRefs(useUserStore());
+const emit = defineEmits(["refreshGroups"]);
+
+const form = ref({
+  title: "",
+  topic: "",
+  startTime: "",
+  endTime: "",
+  NumParticipants: 0,
+  loading: false,
+  errorMessage: "",
+  successMessage: "",
+});
+
+const createGroup = async () => {
+  if (!validateForm()) return;
+
+  form.value.loading = true;
+  form.value.errorMessage = "";
+  form.value.successMessage = "";
+  form.value.startTime = new Date(form.value.startTime).toISOString();
+  form.value.endTime = new Date(form.value.endTime).toISOString();
+
+  try {
+    await fetchy("/api/prayer-group", "POST", {
+      body: {
+        title: form.value.title,
+        topic: form.value.topic,
+        leader: currentUsername.value,
+      },
+    });
+
+    form.value.successMessage = "Prayer group created successfully!";
+    emit("refreshGroups");
+    clearForm();
+  } catch (error) {
+    form.value.errorMessage = "Failed to create the group. Please try again.";
+    console.error("Error creating group:", error);
+  } finally {
+    form.value.loading = false;
+  }
+};
+
+const validateForm = () => {
+  if (!form.value.title || !form.value.topic) {
+    form.value.errorMessage = "Both title and topic are required.";
+    return false;
+  }
+  return true;
+};
+
+const clearForm = () => {
+  form.value.title = "";
+  form.value.topic = "";
+  form.value.startTime = "";
+  form.value.endTime = "";
+};
+</script>
+
+<template>
+  <form @submit.prevent="createGroup" class="pure-form">
+    <fieldset>
+      <legend>Create Prayer Group</legend>
+
+      <input v-model="form.title" placeholder="Group Title" required />
+      <input v-model="form.topic" placeholder="Group Topic" required />
+      <input v-model="form.startTime" type="datetime-local" placeholder="Start Time" required />
+      <input v-model="form.endTime" type="datetime-local" placeholder="End Time" required />
+      <input v-model="form.NumParticipants" type="number" placeholder="Number of Participants" required />
+
+      <button type="submit" class="pure-button pure-button-primary" :disabled="form.loading">
+        {{ form.loading ? "Creating..." : "Create Group" }}
+      </button>
+
+      <p v-if="form.errorMessage" class="error">{{ form.errorMessage }}</p>
+      <p v-if="form.successMessage" class="success">{{ form.successMessage }}</p>
+    </fieldset>
+  </form>
+</template>
+
+<style scoped>
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  max-width: 30em;
+  margin: 0 auto;
+}
+</style> -->

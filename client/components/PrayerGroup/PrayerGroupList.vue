@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
-import PrayerGroupForm from "./PrayerGroupForm.vue";
+import { fetchy } from "@/utils/fetchy";
+import { onBeforeMount, ref } from "vue";
+import { useRoute } from "vue-router";
 import PrayerGroupComponent from "./PrayerGroupComponent.vue";
-import { fetchy } from "../../utils/fetchy";
+import PrayerGroupForm from "./PrayerGroupForm.vue";
 
-// const groups = ref([]);
-// const loaded = ref(false);
 interface PrayerGroup {
   _id: string;
   title: string;
@@ -13,12 +12,20 @@ interface PrayerGroup {
   members: string[];
 }
 
-const groups = ref<PrayerGroup[]>([]); // Use correct type here
+const groups = ref<PrayerGroup[]>([]);
 const loaded = ref(false);
+const route = useRoute();
 
 const getGroups = async () => {
   try {
-    groups.value = await fetchy("/api/prayer/groups", "GET");
+    const groupID = route.params.groupID as string;
+    if (groupID) {
+      const group = await fetchy(`/api/prayer-group/${groupID}`, "GET");
+      groups.value = [group];
+    } else {
+      const response = await fetchy("/api/prayer-groups", "GET");
+      groups.value = response.groups;
+    }
     loaded.value = true;
   } catch (error) {
     console.error("Failed to fetch groups:", error);
@@ -31,6 +38,7 @@ onBeforeMount(getGroups);
 <template>
   <section>
     <PrayerGroupForm @refreshGroups="getGroups" />
+
     <div v-if="loaded">
       <PrayerGroupComponent v-for="group in groups" :key="group._id" :group="group" @refreshGroups="getGroups" />
     </div>

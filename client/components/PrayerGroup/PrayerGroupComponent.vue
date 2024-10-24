@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
-import { fetchy } from "../../utils/fetchy";
+import { fetchy } from "@/utils/fetchy";
+import { defineEmits, defineProps } from "vue";
 
 const props = defineProps(["group"]);
 const emit = defineEmits(["refreshGroups"]);
 
 const joinGroup = async () => {
   try {
-    await fetchy(`/api/prayer/groups/${props.group._id}/join`, "POST");
+    await fetchy(`/api/prayer-group/join/${props.group._id}`, "PUT");
     emit("refreshGroups");
   } catch (error) {
     console.error("Failed to join group:", error);
@@ -16,7 +16,7 @@ const joinGroup = async () => {
 
 const leaveGroup = async () => {
   try {
-    await fetchy(`/api/prayer/groups/${props.group._id}/leave`, "POST");
+    await fetchy(`/api/prayer-group/leave/${props.group._id}`, "PUT");
     emit("refreshGroups");
   } catch (error) {
     console.error("Failed to leave group:", error);
@@ -28,8 +28,9 @@ const leaveGroup = async () => {
   <article class="group">
     <h3>{{ group.title }}</h3>
     <p>{{ group.topic }}</p>
-    <button class="pure-button" @click="joinGroup">Join</button>
-    <button class="pure-button" @click="leaveGroup">Leave</button>
+    
+    <button @click="joinGroup()">Join Group</button>
+    <button @click="leaveGroup()">Leave Group</button>
   </article>
 </template>
 
