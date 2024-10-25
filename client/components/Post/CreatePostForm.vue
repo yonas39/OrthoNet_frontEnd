@@ -46,7 +46,9 @@ textarea {
   height: 6em;
   padding: 0.5em;
   border-radius: 4px;
-  resize: none;
+  resize: vertical;
+  min-height: 100px;
+  max-height: 500px;
 }
 .post_button {
   background-color: #f5c5c7;
