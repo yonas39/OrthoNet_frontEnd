@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from "@/router";
 import { useToastStore } from "@/stores/toast";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
@@ -10,6 +11,14 @@ const currentRouteName = computed(() => currentRoute.name);
 const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 const { toast } = storeToRefs(useToastStore());
+
+const { currentUsername } = storeToRefs(useUserStore());
+const { logoutUser, deleteUser } = useUserStore();
+
+async function logout() {
+  await logoutUser();
+  void router.push({ name: "Home" });
+}
 
 // Make sure to update the session before mounting the app in case the user is already logged in
 onBeforeMount(async () => {
@@ -35,11 +44,13 @@ onBeforeMount(async () => {
           <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> Home </RouterLink>
         </li>
         <!-- <li v-if="isLoggedIn"> -->
-        <li>
-          <RouterLink :to="{ name: 'PrayerMate' }" :class="{ underline: currentRouteName == 'PrayerMate' }"> PrayerMate </RouterLink>
-        </li>
+        <!-- <li> -->
+        <!-- <RouterLink :to="{ name: 'PrayerMate' }" :class="{ underline: currentRouteName == 'PrayerMate' }"> PrayerMate </RouterLink> -->
+        <!-- <button @click="logout">Logout</button>
+        </li> -->
         <li v-if="isLoggedIn">
-          <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }"> Settings </RouterLink>
+          <!-- <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }"> Setting </RouterLink> -->
+          <button @click="logout">Logout</button>
         </li>
         <li v-else>
           <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }"> Login </RouterLink>

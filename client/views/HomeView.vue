@@ -8,6 +8,9 @@ import FriendList from "@/components/Friends/FriendList.vue";
 import PilgrimageTourComponent from "@/components/PilgrimageTour/PilgrimageTourComponent.vue";
 import PostListComponent from "@/components/Post/PostListComponent.vue";
 import PrayerMate from "@/components/PrayerGroup/PrayerMate.vue";
+import Branding from "./Branding.vue";
+import LoginView from "./LoginView.vue";
+// import LoginForm from "../components/Login/LoginForm.vue";
 import UpdateUserForm from "./SettingView.vue";
 // import BibleQuiz from "@/components/Quiz/BibleQuiz.vue";
 // import Tracker from "@/components/Tracker/Tracker.vue";
@@ -42,7 +45,7 @@ function setActiveComponent(name: string) {
 </script>
 
 <template>
-  <div class="layout">
+  <div class="layout" v-if="isLoggedIn">
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="profile">
@@ -73,10 +76,19 @@ function setActiveComponent(name: string) {
 
     <!-- Schedule section -->
     <aside class="schedule">
-      <button class="logout-button">Logout</button>
+      <!-- <button class="logout-button">Logout</button> -->
       <h2>Schedule</h2>
       <div class="calendar-icon">📅</div>
     </aside>
+  </div>
+
+  <div v-else class="logout-view">
+    <Branding />
+
+    <LoginView />
+
+    <!-- <LoginForm />
+    <RegisterForm /> -->
   </div>
 </template>
 
@@ -171,5 +183,22 @@ nav li.active {
 .calendar-icon {
   font-size: 5rem;
   margin-top: 1rem;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f2b8b5;
+}
+
+.logout-view {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-around; /* Changed from space-between to space-around */
+  height: 100%;
+  background-color: #f2b8b5;
 }
 </style>

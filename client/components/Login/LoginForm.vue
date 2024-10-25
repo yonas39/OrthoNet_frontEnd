@@ -16,8 +16,8 @@ async function login() {
 
 <template>
   <form class="pure-form pure-form-aligned" @submit.prevent="login">
-    <h3>Login</h3>
     <fieldset class="login-container">
+      <h3>Login to your account</h3>
       <div>
         <!-- <label for="aligned-name">Username</label> -->
         <input v-model.trim="username" type="text" id="aligned-name" placeholder="Username" required />
@@ -25,10 +25,10 @@ async function login() {
         <input type="password" v-model.trim="password" id="aligned-password" placeholder="Password" required />
         <button type="submit" class="login-button">Login</button>
 
-        <div class="branding">
+        <!-- <div class="branding">
           <h1>OrthoNet</h1>
           <p>Designed for Orthodex<br />by Orthodex</p>
-        </div>
+        </div> -->
       </div>
       <!-- <div class="pure-control-group">
         <label for="aligned-name">Username</label>
