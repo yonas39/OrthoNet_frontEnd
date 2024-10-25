@@ -2,7 +2,14 @@
 import { ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 
-const activeTour = ref(null);
+interface Tour {
+  title: string;
+  // Add other properties of the tour if needed
+}
+
+const activeTour = ref<Tour | null>(null);
+
+// const activeTour = ref(null);
 
 const onMounted = async () => {
   const response = await fetchy("/api/pilgrimage-session/active", "GET");

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import JoinTourComponent from "./JoinTourComponent.vue";
-// import PilgrimageTourComponent from "./PilgrimageTourComponent.vue";
-import ActiveTourStatus from "./ActiveTourStatus.vue";
 import PilgrimageTourList from "./PilgrimageTourList.vue";
 </script>
 

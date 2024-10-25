@@ -68,9 +68,6 @@ const getPilgrimageTour = async () => {
   if (!tour.value) {
     try {
       const tourID = props.tour._id;
-      if (tourID === undefined) {
-        throw new Error("Tour ID is missing.");
-      }
       const response = await fetchy(`/api/pilgrimage-tour/${tourID}`, "GET");
       tour.value = response as Tour;
     } catch (error) {

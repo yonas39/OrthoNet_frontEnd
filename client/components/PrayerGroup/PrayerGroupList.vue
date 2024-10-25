@@ -39,7 +39,7 @@ onBeforeMount(getGroups);
   <section>
     <PrayerGroupForm @refreshGroups="getGroups" />
 
-    <h2 v-if="loaded"><strong>List of Prayer Groups</strong></h2>
+    <h3 v-if="loaded"><strong>List of Prayer Groups</strong></h3>
     <div v-if="loaded" class="prayer-group">
       <PrayerGroupComponent class="each-group" v-for="group in groups" :key="group._id" :group="group" @refreshGroups="getGroups" />
     </div>
@@ -48,7 +48,7 @@ onBeforeMount(getGroups);
 </template>
 
 <style scoped>
-h2 {
+h3 {
   text-align: center;
   margin-top: 3em;
 }
