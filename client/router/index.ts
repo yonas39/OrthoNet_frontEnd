@@ -2,6 +2,11 @@ import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
+import EventsComponent from "../components/EventCalendar/EventsComponent.vue";
+
+import FollowComponent from "../components/Following/FollowComponet.vue";
+import FriendComponent from "../components/Friends/FriendComponent.vue";
+import PilgrimageTourComponent from "../components/PilgrimageTour/PilgrimageTourComponent.vue";
 import PrayerMate from "../components/PrayerGroup/PrayerMate.vue"; // Import PrayerMate view
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
@@ -45,6 +50,28 @@ const router = createRouter({
       component: PrayerMate,
       // meta: { requiresAuth: true }, // Optional: require login to access PrayerMate
       meta: { requiresAuth: false }, // Optional: require login to access PrayerMate
+    },
+    {
+      path: "/friends",
+      name: "Friends",
+      component: FriendComponent,
+      meta: { requiresAuth: true },
+    },
+
+    {
+      path: "/follow",
+      name: "Follow",
+      component: FollowComponent,
+    },
+    {
+      path: "/pilgrimage",
+      name: "PilgrimageTourComponent",
+      component: PilgrimageTourComponent,
+    },
+    {
+      path: "/events",
+      name: "Events",
+      component: EventsComponent,
     },
   ],
 });

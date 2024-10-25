@@ -59,6 +59,7 @@
     "purecss": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "vue": "^3.5.9",
+    "vue-cal": "^4.10.0",
     "vue-router": "^4.4.5",
     "zod": "^3.23.8"
   },

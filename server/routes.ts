@@ -172,9 +172,12 @@ class Routes {
   // Get Following
   @Router.get("/following/:user")
   async getFollowing(session: SessionDoc, user: string) {
+    const userSession = Sessioning.getUser(session);
+    // return await Authing.getUserById(user);
     const userObj = await Authing.getUserByUsername(user);
     const following = await Following.getFollowing(userObj._id);
-    return { following };
+    const res = await Authing.idsToUsernames(following);
+    return { res };
   }
 
   // Get Follower Count
@@ -247,44 +250,17 @@ class Routes {
 
   //   return await Quizing.createQuiz(title, quizQuestions, user); // Use user as the creator
   // }
+
   @Router.post("/quizzes")
   async createQuiz(session: SessionDoc, title: string, questions: any) {
     const user = Sessioning.getUser(session);
-
-    // Check if 'questions' is already an array or a string
-    let quizQuestions;
-    if (typeof questions === "string") {
-      // Try parsing it if it's a string (this could happen if questions are sent as a JSON string)
-      try {
-        quizQuestions = JSON.parse(questions);
-      } catch (e) {
-        return { msg: "Invalid format for questions. It must be a valid JSON array." };
-      }
-    } else if (Array.isArray(questions)) {
-      quizQuestions = questions;
-    } else {
-      return { msg: "Questions must be an array or a valid JSON string." };
-    }
-
-    // Now ensure that each question has the required structure
-    quizQuestions = quizQuestions.map((q: { questionText: string; correctAnswer: string }, index: number) => {
-      if (!q.questionText || !q.correctAnswer) {
-        throw new Error("Each question must have 'questionText' and 'correctAnswer'");
-      }
-      return {
-        questionID: index + 1,
-        questionText: q.questionText,
-        correctAnswer: q.correctAnswer,
-      };
-    });
-
-    return await Quizing.createQuiz(title, quizQuestions, user); // Use user._id as the creator
+    return await Quizing.createQuiz(title, questions, user);
   }
 
   @Router.post("/quizzes/:quizID/start")
   async startQuiz(session: SessionDoc, quizID: string) {
     const user = Sessioning.getUser(session);
-    return await Quizing.startQuiz(user, new ObjectId(quizID)); // Use user
+    return await Quizing.startQuiz(user, new ObjectId(quizID));
   }
 
   @Router.post("/quizzes/:quizID/answer/:questionID")
@@ -296,13 +272,69 @@ class Routes {
   @Router.get("/quizzes/:quizID/progress")
   async getPlayerProgress(session: SessionDoc, quizID: string) {
     const user = Sessioning.getUser(session);
-    return await Quizing.getPlayerProgress(new ObjectId(quizID), user); // Use user
+    return await Quizing.getPlayerProgress(new ObjectId(quizID), user);
   }
 
   @Router.get("/quizzes/:quizID/leaderboard")
   async viewQuizLeaderboard(session: SessionDoc, quizID: string) {
     return await Quizing.getQuizLeaderboard(new ObjectId(quizID));
   }
+  // @Router.post("/quizzes")
+  // async createQuiz(session: SessionDoc, title: string, questions: any) {
+  //   const user = Sessioning.getUser(session);
+
+  //   // Check if 'questions' is already an array or a string
+  //   let quizQuestions;
+  //   if (typeof questions === "string") {
+  //     // Try parsing it if it's a string (this could happen if questions are sent as a JSON string)
+  //     try {
+  //       quizQuestions = JSON.parse(questions);
+  //     } catch (e) {
+  //       return { msg: "Invalid format for questions. It must be a valid JSON array." };
+  //     }
+  //   } else if (Array.isArray(questions)) {
+  //     quizQuestions = questions;
+  //   } else {
+  //     return { msg: "Questions must be an array or a valid JSON string." };
+  //   }
+
+  //   // Now ensure that each question has the required structure
+  //   quizQuestions = quizQuestions.map((q: { questionText: string; correctAnswer: string }, index: number) => {
+  //     if (!q.questionText || !q.correctAnswer) {
+  //       throw new Error("Each question must have 'questionText' and 'correctAnswer'");
+  //     }
+  //     return {
+  //       questionID: index + 1,
+  //       questionText: q.questionText,
+  //       correctAnswer: q.correctAnswer,
+  //     };
+  //   });
+
+  //   return await Quizing.createQuiz(title, quizQuestions, user); // Use user._id as the creator
+  // }
+
+  // @Router.post("/quizzes/:quizID/start")
+  // async startQuiz(session: SessionDoc, quizID: string) {
+  //   const user = Sessioning.getUser(session);
+  //   return await Quizing.startQuiz(user, new ObjectId(quizID)); // Use user
+  // }
+
+  // @Router.post("/quizzes/:quizID/answer/:questionID")
+  // async answerQuestion(session: SessionDoc, quizID: string, questionID: string, selectedAnswer: string) {
+  //   const user = Sessioning.getUser(session);
+  //   return await Quizing.answerQuestion(user, new ObjectId(quizID), Number(questionID), selectedAnswer);
+  // }
+
+  // @Router.get("/quizzes/:quizID/progress")
+  // async getPlayerProgress(session: SessionDoc, quizID: string) {
+  //   const user = Sessioning.getUser(session);
+  //   return await Quizing.getPlayerProgress(new ObjectId(quizID), user); // Use user
+  // }
+
+  // @Router.get("/quizzes/:quizID/leaderboard")
+  // async viewQuizLeaderboard(session: SessionDoc, quizID: string) {
+  //   return await Quizing.getQuizLeaderboard(new ObjectId(quizID));
+  // }
 
   // PRAYER MATE
   // Prayer group and session routes
@@ -503,7 +535,7 @@ class Routes {
   @Router.post("/pilgrimage-tour/:tourID/join")
   async joinGroupTour(session: SessionDoc, tourID: string) {
     const user = Sessioning.getUser(session);
-    return await Touring.joinGroupTour(user, new ObjectId(tourID));
+    return await Touring.joinGroupT(user, new ObjectId(tourID));
   }
 
   // Get all pilgrimage tours

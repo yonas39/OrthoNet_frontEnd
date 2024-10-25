@@ -64,7 +64,7 @@ export default class PilgrimageTouringConcept {
   }
 
   // Join a group tour
-  async joinGroupTour(user: ObjectId, tourID: ObjectId) {
+  async joinGroupT(user: ObjectId, tourID: ObjectId) {
     await this.assertTourExists(tourID);
     const existingParticipation = await this.userParticipation.readOne({ user, tourId: tourID });
 

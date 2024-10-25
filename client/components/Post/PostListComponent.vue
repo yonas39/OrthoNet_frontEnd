@@ -37,7 +37,7 @@ onBeforeMount(async () => {
 });
 </script>
 
-<template>
+<template class="container">
   <section v-if="isLoggedIn">
     <h2>Create a post:</h2>
     <CreatePostForm @refreshPosts="getPosts" />
@@ -48,7 +48,7 @@ onBeforeMount(async () => {
     <SearchPostForm @getPostsByAuthor="getPosts" />
   </div>
   <section class="posts" v-if="loaded && posts.length !== 0">
-    <article v-for="post in posts" :key="post._id">
+    <article v-for="post in posts" :key="post._id" class="post-item">
       <PostComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
       <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
     </article>
@@ -58,26 +58,12 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped>
+.container {
+  margin-top: 1em;
+  color: aqua;
+}
 section {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-}
-
-section,
-p,
-.row {
-  margin: 0 auto;
-  max-width: 60em;
-}
-
-article {
-  background-color: var(--base-bg);
-  border-radius: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  padding: 1em;
+  margin-bottom: 1em;
 }
 
 .posts {
@@ -89,5 +75,12 @@ article {
   justify-content: space-between;
   margin: 0 auto;
   max-width: 60em;
+}
+
+.post-item {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
 }
 </style>

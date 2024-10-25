@@ -28,8 +28,8 @@ const leaveGroup = async () => {
   <article class="group">
     <h3>{{ group.title }}</h3>
     <p>{{ group.topic }}</p>
-    
-    <button @click="joinGroup()">Join Group</button>
+
+    <button class="join-button" @click="joinGroup()">Join Group</button>
     <button @click="leaveGroup()">Leave Group</button>
   </article>
 </template>
@@ -40,5 +40,26 @@ const leaveGroup = async () => {
   border: 1px solid #ccc;
   border-radius: 8px;
   margin: 1em 0;
+}
+
+button {
+  padding: 0.5em 1em;
+  margin: 0.5em;
+  width: 30%;
+  padding: 10px;
+  background-color: #ff9898;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #ff7171;
 }
 </style>
