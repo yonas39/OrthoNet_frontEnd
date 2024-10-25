@@ -23,8 +23,7 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 // Track the currently selected component to render
 const activeComponent = ref("PostListComponent");
 
-// Map component names to the corresponding Vue components
-const componentsMap = {
+const componentsMap: Record<string, any> = {
   PostListComponent,
   PrayerMate,
   FriendList,
@@ -32,12 +31,7 @@ const componentsMap = {
   PilgrimageTourComponent,
   EventsComponent,
   UpdateUserForm,
-  // BibleQuiz,
-  // Tracker,
-  // EventCalendar,
-  // GroupsLeaders,
 };
-
 // Function to switch the active component
 function setActiveComponent(name: string) {
   activeComponent.value = name;
@@ -58,7 +52,7 @@ function setActiveComponent(name: string) {
           <li @click="setActiveComponent('PrayerMate')" :class="{ active: activeComponent === 'PrayerMate' }">PrayerMate</li>
           <li @click="setActiveComponent('FollowComponet')" :class="{ active: activeComponent === 'FollowComponet' }">Followers</li>
 
-          <li @click="setActiveComponent('PilgrimageTourComponent')" :class="{ active: activeComponent === 'PilgrimageTourComponent' }">Pilgrimage</li>
+          <!-- <li @click="setActiveComponent('PilgrimageTourComponent')" :class="{ active: activeComponent === 'PilgrimageTourComponent' }">Pilgrimage</li> -->
           <li @click="setActiveComponent('BibleQuiz')" :class="{ active: activeComponent === 'BibleQuiz' }">Bible Quiz</li>
           <li @click="setActiveComponent('Tracker')" :class="{ active: activeComponent === 'Tracker' }">Tracker</li>
           <li @click="setActiveComponent('EventsComponent')" :class="{ active: activeComponent === 'EventsComponent' }">Event Calendar</li>
