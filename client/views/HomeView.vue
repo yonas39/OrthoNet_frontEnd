@@ -13,7 +13,6 @@ import LoginView from "./LoginView.vue";
 // import LoginForm from "../components/Login/LoginForm.vue";
 import UpdateUserForm from "./SettingView.vue";
 // import Tracker from "@/components/Tracker/Tracker.vue";
-import PrayerGroupList from "@/components/PrayerGroup/PrayerGroupList.vue";
 import BibleVerse from "./BibleVerse.vue";
 
 import BibleQuiz from "@/components/Quiz/BibleQuiz.vue";
@@ -57,14 +56,14 @@ function setActiveComponent(name: string) {
         <ul>
           <li @click="setActiveComponent('PostListComponent')" :class="{ active: activeComponent === 'PostListComponent' }">Home</li>
           <li @click="setActiveComponent('PrayerMate')" :class="{ active: activeComponent === 'PrayerMate' }">PrayerMate</li>
+          <li @click="setActiveComponent('BibleQuiz')" :class="{ active: activeComponent === 'BibleQuiz' }">Bible Quiz</li>
           <li @click="setActiveComponent('FollowComponet')" :class="{ active: activeComponent === 'FollowComponet' }">Followers</li>
           <li @click="setActiveComponent('FriendList')" :class="{ active: activeComponent === 'FriendList' }">Friends</li>
           <!-- <li @click="setActiveComponent('PilgrimageTourComponent')" :class="{ active: activeComponent === 'PilgrimageTourComponent' }">Pilgrimage</li> -->
-          <li @click="setActiveComponent('BibleQuiz')" :class="{ active: activeComponent === 'BibleQuiz' }">Bible Quiz</li>
           <!-- <li @click="setActiveComponent('BibleVerse')" :class="{ active: activeComponent === 'BibleVerse' }">Bible Verse</li> -->
           <!-- <li @click="setActiveComponent('Tracker')" :class="{ active: activeComponent === 'Tracker' }">Tracker</li> -->
           <li @click="setActiveComponent('EventsComponent')" :class="{ active: activeComponent === 'EventsComponent' }">Event Calendar</li>
-          <li @click="setActiveComponent('GroupsLeaders')" :class="{ active: activeComponent === 'GroupsLeaders' }">Groups/ Leaders</li>
+          <!-- <li @click="setActiveComponent('GroupsLeaders')" :class="{ active: activeComponent === 'GroupsLeaders' }">Groups/ Leaders</li> -->
           <li @click="setActiveComponent('UpdateUserForm')" :class="{ active: activeComponent === 'UpdateUserForm' }">Settings</li>
         </ul>
       </nav>
@@ -78,22 +77,7 @@ function setActiveComponent(name: string) {
 
     <!-- Schedule section -->
     <aside class="schedule">
-      <!-- <button class="logout-button">Logout</button> -->
-      <!-- <h2>Schedule</h2>
-      <div class="calendar-icon">📅</div> -->
-      <div v-if="activeComponent === 'PrayerMate'">
-        <Branding />
-      </div>
-      <!-- <div v-else><PrayerMate /></div> -->
-      <div v-else-if="activeComponent === 'BibleQuiz'">
-        <BibleVerse />
-        <!-- <ul>
-          <li @click="setActiveComponent('BibleVerse')" :class="{ active: activeComponent === 'BibleVerse' }">Bible Verse</li>
-        </ul> -->
-      </div>
-      <div v-else>
-        <PrayerGroupList />
-      </div>
+      <BibleVerse />
     </aside>
   </div>
 
@@ -193,11 +177,14 @@ nav li.active {
 /* Schedule Section */
 .schedule {
   width: 300px;
+  height: 100%;
   padding: 1rem;
   background-color: #f5c5c7;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: sticky;
+  top: 0;
+  right: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .calendar-icon {
@@ -220,5 +207,16 @@ body {
   justify-content: space-around; /* Changed from space-between to space-around */
   height: 100%;
   background-color: #f2b8b5;
+}
+.options {
+  width: 250px;
+
+  padding: 1rem;
+  background-color: #f5c5c7;
+  position: sticky;
+  top: 0;
+  right: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>

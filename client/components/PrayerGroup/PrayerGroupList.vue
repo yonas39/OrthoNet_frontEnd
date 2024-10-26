@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { fetchy } from "@/utils/fetchy";
 import { onBeforeMount, ref } from "vue";
-import { useRoute } from "vue-router";
 import PrayerGroupComponent from "./PrayerGroupComponent.vue";
 import PrayerGroupForm from "./PrayerGroupForm.vue";
 
@@ -9,23 +8,19 @@ interface PrayerGroup {
   _id: string;
   title: string;
   topic: string;
+  leader: string;
   members: string[];
 }
 
 const groups = ref<PrayerGroup[]>([]);
 const loaded = ref(false);
-const route = useRoute();
 
 const getGroups = async () => {
   try {
-    const groupID = route.params.groupID as string;
-    if (groupID) {
-      const group = await fetchy(`/api/prayer-group/${groupID}`, "GET");
-      groups.value = [group];
-    } else {
-      const response = await fetchy("/api/prayer-groups", "GET");
-      groups.value = response.groups;
-    }
+    const response = await fetchy("/api/prayer-groups", "GET");
+    console.log("Response:", response);
+    groups.value = response; // Assign the fetched data to the groups array
+    console.log("groups !!!!!!!!!!!!:", groups.value);
     loaded.value = true;
   } catch (error) {
     console.error("Failed to fetch groups:", error);
@@ -39,7 +34,7 @@ onBeforeMount(getGroups);
   <section>
     <PrayerGroupForm @refreshGroups="getGroups" />
 
-    <h3 v-if="loaded"><strong>List of Prayer Groups</strong></h3>
+    <h2 v-if="loaded"><strong>List of Prayer Groups</strong></h2>
     <div v-if="loaded" class="prayer-group">
       <PrayerGroupComponent class="each-group" v-for="group in groups" :key="group._id" :group="group" @refreshGroups="getGroups" />
     </div>
@@ -48,7 +43,7 @@ onBeforeMount(getGroups);
 </template>
 
 <style scoped>
-h3 {
+h2 {
   text-align: center;
   margin-top: 3em;
 }
@@ -66,7 +61,6 @@ section {
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
-
   padding: 16px;
   border-radius: 8px;
 }
