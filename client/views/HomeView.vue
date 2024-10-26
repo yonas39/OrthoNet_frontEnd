@@ -12,8 +12,11 @@ import Branding from "./Branding.vue";
 import LoginView from "./LoginView.vue";
 // import LoginForm from "../components/Login/LoginForm.vue";
 import UpdateUserForm from "./SettingView.vue";
-// import BibleQuiz from "@/components/Quiz/BibleQuiz.vue";
 // import Tracker from "@/components/Tracker/Tracker.vue";
+import PrayerGroupList from "@/components/PrayerGroup/PrayerGroupList.vue";
+import BibleVerse from "./BibleVerse.vue";
+
+import BibleQuiz from "@/components/Quiz/BibleQuiz.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
@@ -31,6 +34,8 @@ const componentsMap: Record<string, any> = {
   PilgrimageTourComponent,
   EventsComponent,
   UpdateUserForm,
+  // BibleVerse,
+  BibleQuiz,
 };
 // Function to switch the active component
 function setActiveComponent(name: string) {
@@ -43,7 +48,9 @@ function setActiveComponent(name: string) {
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="profile">
-        <div class="profile-icon">👤</div>
+        <!-- <img class="profile-icon">👤</img> -->
+        <img class="profile-icon" src="https://t3.ftcdn.net/jpg/01/91/01/78/360_F_191017886_YIfoLtRxVw8PIeAMtR0i4ZDwAyKutVI2.jpg" alt="" />
+
         <h2>{{ currentUsername }}</h2>
       </div>
       <nav class="options">
@@ -51,10 +58,11 @@ function setActiveComponent(name: string) {
           <li @click="setActiveComponent('PostListComponent')" :class="{ active: activeComponent === 'PostListComponent' }">Home</li>
           <li @click="setActiveComponent('PrayerMate')" :class="{ active: activeComponent === 'PrayerMate' }">PrayerMate</li>
           <li @click="setActiveComponent('FollowComponet')" :class="{ active: activeComponent === 'FollowComponet' }">Followers</li>
-
+          <li @click="setActiveComponent('FriendList')" :class="{ active: activeComponent === 'FriendList' }">Friends</li>
           <!-- <li @click="setActiveComponent('PilgrimageTourComponent')" :class="{ active: activeComponent === 'PilgrimageTourComponent' }">Pilgrimage</li> -->
           <li @click="setActiveComponent('BibleQuiz')" :class="{ active: activeComponent === 'BibleQuiz' }">Bible Quiz</li>
-          <li @click="setActiveComponent('Tracker')" :class="{ active: activeComponent === 'Tracker' }">Tracker</li>
+          <!-- <li @click="setActiveComponent('BibleVerse')" :class="{ active: activeComponent === 'BibleVerse' }">Bible Verse</li> -->
+          <!-- <li @click="setActiveComponent('Tracker')" :class="{ active: activeComponent === 'Tracker' }">Tracker</li> -->
           <li @click="setActiveComponent('EventsComponent')" :class="{ active: activeComponent === 'EventsComponent' }">Event Calendar</li>
           <li @click="setActiveComponent('GroupsLeaders')" :class="{ active: activeComponent === 'GroupsLeaders' }">Groups/ Leaders</li>
           <li @click="setActiveComponent('UpdateUserForm')" :class="{ active: activeComponent === 'UpdateUserForm' }">Settings</li>
@@ -71,8 +79,21 @@ function setActiveComponent(name: string) {
     <!-- Schedule section -->
     <aside class="schedule">
       <!-- <button class="logout-button">Logout</button> -->
-      <h2>Schedule</h2>
-      <div class="calendar-icon">📅</div>
+      <!-- <h2>Schedule</h2>
+      <div class="calendar-icon">📅</div> -->
+      <div v-if="activeComponent === 'PrayerMate'">
+        <Branding />
+      </div>
+      <!-- <div v-else><PrayerMate /></div> -->
+      <div v-else-if="activeComponent === 'BibleQuiz'">
+        <BibleVerse />
+        <!-- <ul>
+          <li @click="setActiveComponent('BibleVerse')" :class="{ active: activeComponent === 'BibleVerse' }">Bible Verse</li>
+        </ul> -->
+      </div>
+      <div v-else>
+        <PrayerGroupList />
+      </div>
     </aside>
   </div>
 
@@ -111,8 +132,12 @@ function setActiveComponent(name: string) {
 }
 
 .profile-icon {
+  margin-top: 1rem;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
   font-size: 3rem;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 
 nav ul {
@@ -131,6 +156,7 @@ nav li {
 
 nav li.active {
   background-color: #8c5151;
+  width: 100%;
   color: white;
 }
 

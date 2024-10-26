@@ -60,7 +60,8 @@ export default class PrayerMate {
       },
     );
 
-    return { msg: `User ${user} has joined the group ${groupID}.` };
+    // return { msg: `User ${user} has joined the group ${groupID}.` };
+    return "You joined the group !";
   }
 
   // Start a prayer session for a group
@@ -93,7 +94,7 @@ export default class PrayerMate {
     // Update the session with correct ObjectId for session._id and set active to false
     await this.sessions.partialUpdateOne({ _id: new ObjectId(session._id) }, { active: false, endTime: new Date() });
 
-    return { msg: "Prayer session ended." };
+    return "Prayer session ended.";
   }
 
   // Leave a prayer group
@@ -115,7 +116,8 @@ export default class PrayerMate {
     // Update the group with the updated members list
     await this.groups.partialUpdateOne({ _id: new ObjectId(groupID) }, { members: group.members, dateUpdated: new Date() });
 
-    return { msg: `User ${user} has left the group ${groupID}.` };
+    // return { msg: `User ${user} has left the group ${groupID}.` };
+    return "You left the group.";
   }
 
   // Get all prayer groups
@@ -175,13 +177,15 @@ class PrayerGroupNotFoundError extends NotFoundError {
 
 class UserAlreadyInGroupError extends NotAllowedError {
   constructor(user: ObjectId, groupID: ObjectId) {
-    super(`User ${user} is already a member of group ${groupID}.`);
+    super("You already a member of group.");
+    // super(`You already a member of group ${groupID}.`);
   }
 }
 
 class UserNotInGroupError extends NotAllowedError {
   constructor(user: ObjectId, groupID: ObjectId) {
-    super(`User ${user} is not a member of group ${groupID}.`);
+    super("You are not a member of group.");
+    // super(`User ${user} is not a member of group ${groupID}.`);
   }
 }
 

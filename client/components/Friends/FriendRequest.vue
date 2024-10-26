@@ -1,10 +1,10 @@
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { fetchy } from "@/utils/fetchy";
 import { ref } from "vue";
 
 const username = ref("");
 const feedback = ref("");
-// const friendsList = ref<string[]>([]);
+const friendsList = ref<string[]>([]);
 
 const sendRequest = async () => {
   try {
@@ -29,6 +29,7 @@ const acceptRequest = async (from: string) => {
 
 <template>
   <section>
+    {{ feedback }}
     <h2>Send Friend Request</h2>
     <input v-model="username" placeholder="Enter username" />
     <button @click="sendRequest">Send Request</button>
@@ -45,9 +46,9 @@ const acceptRequest = async (from: string) => {
 button {
   margin-left: 1em;
 }
-</style> -->
+</style>
 
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { fetchy } from "@/utils/fetchy";
 import { onMounted, ref } from "vue";
 
@@ -60,9 +61,9 @@ const loadRequests = async () => {
   } catch (error) {
     console.error("Failed to load friend requests:", error);
   }
-};
+}; -->
 
-// const handleRequest = async (username: string, action: "accept" | "reject") => {
+<!-- // const handleRequest = async (username: string, action: "accept" | "reject") => {
 //   const url = `/friend/${action}/${username}`;
 //   try {
 //     await fetchy(url, "PUT");
@@ -70,8 +71,8 @@ const loadRequests = async () => {
 //   } catch (error) {
 //     console.error(`Failed to ${action} request from ${username}:`, error);
 //   }
-// };
-
+// }; -->
+<!--
 onMounted(loadRequests);
 </script>
 
@@ -81,9 +82,9 @@ onMounted(loadRequests);
     <ul v-if="requests.length">
       <li v-for="request in requests" :key="request">
         {{ request }}
-        <!-- <button @click="handleRequest(request, 'accept')">Accept</button>
+      <button @click="handleRequest(request, 'accept')">Accept</button>
         <button @click="handleRequest(request, 'reject')">Reject</button> -->
-      </li>
+<!-- </li>
     </ul>
     <p v-if="!requests.length">No friend requests.</p>
   </section>
@@ -93,4 +94,4 @@ onMounted(loadRequests);
 button {
   margin-left: 0.5em;
 }
-</style>
+</style> -->

@@ -56,7 +56,6 @@ section {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  /* background-color: #f9f9f9; */
   background-color: #f5c5c7;
   border: 1px solid #000000;
   border-radius: 8px;

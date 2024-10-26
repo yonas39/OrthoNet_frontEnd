@@ -3,7 +3,7 @@
 <template>
   <section>
     <h1>Friending Dashboard</h1>
-    <!-- <FriendList /> -->
+    <FriendList />
     <FriendRequests />
     <!-- <FriendManagement /> -->
   </section>

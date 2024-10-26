@@ -1,0 +1,275 @@
+{
+  "title": "Bible Knowledge Quiz",
+  "questions": [
+    {
+      "question": { "text": "What is the first book of the Bible?" },
+      "options": ["Genesis", "Exodus", "Leviticus", "Numbers"],
+      "correctAnswer": "Genesis",
+      "tags": ["old_testament", "books"],
+      "difficulty": "easy",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who led the Israelites out of Egypt?" },
+      "options": ["Moses", "Aaron", "Joseph", "Joshua"],
+      "correctAnswer": "Moses",
+      "tags": ["old_testament", "prophets"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "What is the longest book in the Bible?" },
+      "options": ["Psalms", "Genesis", "Isaiah", "Jeremiah"],
+      "correctAnswer": "Psalms",
+      "tags": ["books", "old_testament"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "In what language was most of the Old Testament written?" },
+      "options": ["Hebrew", "Greek", "Aramaic", "Latin"],
+      "correctAnswer": "Hebrew",
+      "tags": ["old_testament", "languages"],
+      "difficulty": "hard",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first king of Israel?" },
+      "options": ["Saul", "David", "Solomon", "Samuel"],
+      "correctAnswer": "Saul",
+      "tags": ["old_testament", "kings"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "How many disciples did Jesus have?" },
+      "options": ["10", "12", "15", "7"],
+      "correctAnswer": "12",
+      "tags": ["new_testament", "disciples"],
+      "difficulty": "easy",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "What was Jesus’ first miracle?" },
+      "options": ["Turning water into wine", "Feeding the 5,000", "Healing a blind man", "Walking on water"],
+      "correctAnswer": "Turning water into wine",
+      "tags": ["new_testament", "miracles"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Where was Jesus born?" },
+      "options": ["Bethlehem", "Nazareth", "Jerusalem", "Galilee"],
+      "correctAnswer": "Bethlehem",
+      "tags": ["new_testament", "birth_of_jesus"],
+      "difficulty": "easy",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who betrayed Jesus?" },
+      "options": ["Peter", "Judas", "John", "Paul"],
+      "correctAnswer": "Judas",
+      "tags": ["new_testament", "betrayal"],
+      "difficulty": "easy",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "What is the last book of the Bible?" },
+      "options": ["Revelation", "Jude", "Acts", "Romans"],
+      "correctAnswer": "Revelation",
+      "tags": ["books", "new_testament"],
+      "difficulty": "easy",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who is considered the author of most Psalms?" },
+      "options": ["David", "Solomon", "Moses", "Asaph"],
+      "correctAnswer": "David",
+      "tags": ["old_testament", "psalms"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "How many days did it rain during the flood of Noah?" },
+      "options": ["40", "30", "50", "100"],
+      "correctAnswer": "40",
+      "tags": ["old_testament", "events"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "What was the name of the garden where Adam and Eve lived?" },
+      "options": ["Eden", "Gethsemane", "Bethel", "Hebron"],
+      "correctAnswer": "Eden",
+      "tags": ["old_testament", "genesis"],
+      "difficulty": "easy",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who interpreted Pharaoh’s dream in Egypt?" },
+      "options": ["Joseph", "Moses", "Aaron", "Daniel"],
+      "correctAnswer": "Joseph",
+      "tags": ["old_testament", "dreams"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "How many books are in the orthodox Bible?" },
+      "options": ["66", "72", "60", "80"],
+      "correctAnswer": "80",
+      "tags": ["books", "general"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first martyr of the Christian church?" },
+      "options": ["Stephen", "Paul", "Peter", "John"],
+      "correctAnswer": "Stephen",
+      "tags": ["new_testament", "martyrs"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Christian missionary?" },
+      "options": ["Paul", "Peter", "Barnabas", "John"],
+      "correctAnswer": "Paul",
+      "tags": ["new_testament", "missionaries"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Gentile convert to Christianity?" },
+      "options": ["Cornelius", "Philip", "Lydia", "Timothy"],
+      "correctAnswer": "Cornelius",
+      "tags": ["new_testament", "conversion"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who wrote most of the New Testament?" },
+      "options": ["Paul", "Peter", "John", "James"],
+      "correctAnswer": "Paul",
+      "tags": ["new_testament", "authors"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Christian martyr?" },
+      "options": ["Stephen", "Paul", "Peter", "John"],
+      "correctAnswer": "Stephen",
+      "tags": ["new_testament", "martyrs"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Christian missionary?" },
+      "options": ["Paul", "Peter", "Barnabas", "John"],
+      "correctAnswer": "Paul",
+      "tags": ["new_testament", "missionaries"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Gentile convert to Christianity?" },
+      "options": ["Cornelius", "Philip", "Lydia", "Timothy"],
+      "correctAnswer": "Cornelius",
+      "tags": ["new_testament", "conversion"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who wrote most of the New Testament?" },
+      "options": ["Paul", "Peter", "John", "James"],
+      "correctAnswer": "Paul",
+      "tags": ["new_testament", "authors"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "What is the first book of the Bible?" },
+      "options": ["Genesis", "Exodus", "Leviticus", "Numbers"],
+      "correctAnswer": "Genesis",
+      "tags": ["old_testament", "books"],
+      "difficulty": "easy",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text ": "Who led the Israelites out of Egypt?" },
+      "options": ["Moses", "Aaron", "Joseph", "Joshua"],
+      "correctAnswer": "Moses",
+      "tags": ["old_testament", "prophets"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who wrote most of the New Testament?" },
+      "options": ["Paul", "Peter", "John", "James"],
+      "correctAnswer": "Paul",
+      "tags": ["new_testament", "authors"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Christian martyr?" },
+      "options": ["Stephen", "Paul", "Peter", "John"],
+      "correctAnswer": "Stephen",
+      "tags": ["new_testament", "martyrs"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Christian missionary?" },
+      "options": ["Paul", "Peter", "Barnabas", "John"],
+      "correctAnswer": "Paul",
+      "tags": ["new_testament", "missionaries"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who was the first Gentile convert to Christianity?" },
+      "options": ["Cornelius", "Philip", "Lydia", "Timothy"],
+      "correctAnswer": "Cornelius",
+      "tags": ["new_testament", "conversion"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    },
+    {
+      "question": { "text": "Who wrote most of the New Testament?" },
+      "options": ["Paul", "Peter", "John", "James"],
+      "correctAnswer": "Paul",
+      "tags": ["new_testament", "authors"],
+      "difficulty": "medium",
+      "regions": ["global"],
+      "isNiche": false
+    }
+  ]
+}

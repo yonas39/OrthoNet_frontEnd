@@ -31,17 +31,20 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <header>
+  <header class="layout">
     <nav>
       <div class="title">
-        <img src="@/assets/images/logo.svg" />
+        <!-- <img src="@/assets/images/logo.svg" /> -->
+        <img class="profile-icon" src="https://borkena.com/wp-content/uploads/2023/03/Ethiopian-Church.jpg" alt="Profile Image" />
         <RouterLink :to="{ name: 'Home' }">
-          <h1>Social Media App</h1>
+          <!-- <h1>Social Media App</h1> -->
+          <h1>OrthoNet</h1>
+          <!-- <Branding /> -->
         </RouterLink>
       </div>
       <ul>
         <li>
-          <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> Home </RouterLink>
+          <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> <button>HOME</button> </RouterLink>
         </li>
         <!-- <li v-if="isLoggedIn"> -->
         <!-- <li> -->
@@ -69,12 +72,17 @@ onBeforeMount(async () => {
 
 nav {
   padding: 1em 2em;
-  background-color: lightgray;
+  /* background-color: lightgray; */
+  background-color: #fda49d; /* Light pink background */
   display: flex;
   align-items: center;
 }
 
 h1 {
+  /* Add a nice and fancy looking font-family
+   */
+  font-family: didot;
+
   font-size: 2em;
   margin: 0;
 }
@@ -85,8 +93,15 @@ h1 {
   gap: 0.5em;
 }
 
-img {
+/* img {
   height: 2em;
+} */
+.profile-icon {
+  width: 1.5em;
+  height: 1.5em;
+  /* border-radius: 50%; */
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
 }
 
 a {

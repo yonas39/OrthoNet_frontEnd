@@ -22,6 +22,15 @@ const leaveGroup = async () => {
     console.error("Failed to leave group:", error);
   }
 };
+const viewGroupDetail = async () => {
+  try {
+    // const data = await fetchy(`/api/prayer-group/join/${props.group._id}`, "PUT");
+    props.group;
+    console.log("Group joined successfully", props.group);
+  } catch (error) {
+    console.error("Failed to join group:", error);
+  }
+};
 </script>
 
 <template>
@@ -29,8 +38,9 @@ const leaveGroup = async () => {
     <h3>{{ group.title }}</h3>
     <p>{{ group.topic }}</p>
 
-    <button class="join-button" @click="joinGroup()">Join Group</button>
-    <button @click="leaveGroup()">Leave Group</button>
+    <button class="join-button" @click="joinGroup()">Join</button>
+    <button @click="leaveGroup()">Leave</button>
+    <button @click="viewGroupDetail()">Detail</button>
   </article>
 </template>
 

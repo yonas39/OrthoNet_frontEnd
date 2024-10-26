@@ -2,9 +2,12 @@
 import { fetchy } from "@/utils/fetchy";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import EventDetails from "./EventDetails.vue";
 
 const events = ref<any[]>([]);
 const router = useRouter();
+const selectedEvent = ref<any>(null);
+const showEventDetails = ref(false);
 
 const fetchEvents = async () => {
   try {
@@ -14,8 +17,14 @@ const fetchEvents = async () => {
   }
 };
 
-const viewEvent = (id: string) => {
-  router.push(`/api/events/${id}`);
+const viewEvent = (event: any) => {
+  selectedEvent.value = event;
+  showEventDetails.value = true;
+};
+
+const closeEventDetails = () => {
+  showEventDetails.value = false;
+  selectedEvent.value = null;
 };
 
 const deleteEvent = async (id: string) => {
@@ -27,7 +36,7 @@ const deleteEvent = async (id: string) => {
   }
 };
 
-const JoinEvent = async (id: string) => {
+const joinEvent = async (id: string) => {
   try {
     await fetchy(`/api/events/${id}/attendees`, "POST");
     fetchEvents(); // Refresh the list after deletion
@@ -50,13 +59,13 @@ onMounted(fetchEvents);
         <p><strong>Description:</strong> {{ event.description }}</p>
         <p><strong>Start Date:</strong> {{ event.startDate }}</p>
         <p><strong>End Date:</strong> {{ event.endDate }}</p>
-        <!-- <p><strong>Number of Attendees:</strong> {{ event.attendees.length }}</p> -->
-        <button class="small-button" @click="() => viewEvent(event._id)">View</button>
+        <button class="small-button" @click="() => viewEvent(event)">View</button>
         <button class="small-button" @click="() => deleteEvent(event._id)">Delete</button>
-        <button class="small-button" @click="() => JoinEvent(event._id)">Join</button>
+        <button class="small-button" @click="() => joinEvent(event._id)">Join</button>
       </div>
     </div>
     <p v-else>No events available.</p>
+    <EventDetails :event="selectedEvent" :show="showEventDetails" @close="closeEventDetails" />
   </div>
 </template>
 
@@ -76,8 +85,6 @@ onMounted(fetchEvents);
 }
 
 .event-list .small-button {
-  /* display: block; */
-  /* width: 100%; */
   width: 4em;
   margin: 0.5em;
   padding: 0.35em;
@@ -117,10 +124,10 @@ onMounted(fetchEvents);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: auto;
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflowed text */
-  text-overflow: ellipsis; /* Add ellipsis (...) to cut-off text */
-  border: 1px solid #ccc; /* Optional: Just for visualization */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #ccc;
 }
 
 .event-card p {

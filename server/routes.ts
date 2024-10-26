@@ -115,7 +115,7 @@ class Routes {
     return await Authing.idsToUsernames(await Friending.getFriends(user));
   }
 
-  @Router.post("/friend/request")
+  @Router.post("/friend/request/:to")
   async sendFriendRequest(session: SessionDoc, to: string) {
     const user = Sessioning.getUser(session);
     const toOid = (await Authing.getUserByUsername(to))._id;
@@ -143,6 +143,13 @@ class Routes {
     return await Friending.removeFriend(user, friendOid);
   }
 
+  @Router.get("/friend/requests")
+  async getPendingRequests(session: SessionDoc) {
+    const user = Sessioning.getUser(session);
+    const requests = await Friending.getRequests(user);
+    return Responses.friendRequests(requests);
+  }
+
   //FOLLOWING
   // Follow User
   //
@@ -165,7 +172,8 @@ class Routes {
   @Router.get("/followers/:user")
   async getFollowers(session: SessionDoc, user: string) {
     const userObj = await Authing.getUserByUsername(user);
-    const followers = await Following.getFollowers(userObj._id);
+    // const followers = await Following.getFollowers(userObj._id);
+    const followers = await Authing.idsToUsernames(await Following.getFollowers(userObj._id));
     return { followers };
   }
 
@@ -175,9 +183,10 @@ class Routes {
     const userSession = Sessioning.getUser(session);
     // return await Authing.getUserById(user);
     const userObj = await Authing.getUserByUsername(user);
-    const following = await Following.getFollowing(userObj._id);
-    const res = await Authing.idsToUsernames(following);
-    return { res };
+    const following = await Authing.idsToUsernames(await Following.getFollowing(userObj._id));
+    // console.log(following);
+    // const res = await Authing.idsToUsernames(following);
+    return { following };
   }
 
   // Get Follower Count
@@ -251,30 +260,87 @@ class Routes {
   //   return await Quizing.createQuiz(title, quizQuestions, user); // Use user as the creator
   // }
 
+  // @Router.post("/quizzes")
+  // async createQuiz(session: SessionDoc, title: string, questions: any) {
+  //   const user = Sessioning.getUser(session);
+  //   return await Quizing.createQuiz(title, questions, user);
+  // }
+
+  // @Router.post("/quizzes/:quizID/start")
+  // async startQuiz(session: SessionDoc, quizID: string) {
+  //   const user = Sessioning.getUser(session);
+  //   return await Quizing.startQuiz(user, new ObjectId(quizID));
+  // }
+
+  // @Router.post("/quizzes/:quizID/answer/:questionID")
+  // async answerQuestion(session: SessionDoc, quizID: string, questionID: string, selectedAnswer: string) {
+  //   const user = Sessioning.getUser(session);
+  //   return await Quizing.answerQuestion(user, new ObjectId(quizID), Number(questionID), selectedAnswer);
+  // }
+
+  // @Router.get("/quizzes/:quizID/progress")
+  // async getPlayerProgress(session: SessionDoc, quizID: string) {
+  //   const user = Sessioning.getUser(session);
+  //   return await Quizing.getPlayerProgress(new ObjectId(quizID), user);
+  // }
+
+  // @Router.get("/quizzes/:quizID/leaderboard")
+  // async viewQuizLeaderboard(session: SessionDoc, quizID: string) {
+  //   return await Quizing.getQuizLeaderboard(new ObjectId(quizID));
+  // }
+
+  // Create a new quiz
   @Router.post("/quizzes")
+  @Router.validate(
+    z.object({
+      title: z.string().min(1),
+      questions: z
+        .array(
+          z.object({
+            question: z.object({ text: z.string().min(1) }),
+            options: z.array(z.string()).length(4),
+            correctAnswer: z.string().min(1),
+            tags: z.array(z.string()).optional(),
+            difficulty: z.string().optional(),
+            regions: z.array(z.string()).optional(),
+            isNiche: z.boolean().optional(),
+          }),
+        )
+        .min(1),
+    }),
+  )
   async createQuiz(session: SessionDoc, title: string, questions: any) {
     const user = Sessioning.getUser(session);
     return await Quizing.createQuiz(title, questions, user);
   }
 
+  // Start a quiz
   @Router.post("/quizzes/:quizID/start")
   async startQuiz(session: SessionDoc, quizID: string) {
     const user = Sessioning.getUser(session);
     return await Quizing.startQuiz(user, new ObjectId(quizID));
   }
 
+  // Answer a quiz question
   @Router.post("/quizzes/:quizID/answer/:questionID")
+  @Router.validate(
+    z.object({
+      selectedAnswer: z.string().min(1),
+    }),
+  )
   async answerQuestion(session: SessionDoc, quizID: string, questionID: string, selectedAnswer: string) {
     const user = Sessioning.getUser(session);
     return await Quizing.answerQuestion(user, new ObjectId(quizID), Number(questionID), selectedAnswer);
   }
 
+  // Get player progress for a quiz
   @Router.get("/quizzes/:quizID/progress")
   async getPlayerProgress(session: SessionDoc, quizID: string) {
     const user = Sessioning.getUser(session);
     return await Quizing.getPlayerProgress(new ObjectId(quizID), user);
   }
 
+  // View leaderboard for a quiz
   @Router.get("/quizzes/:quizID/leaderboard")
   async viewQuizLeaderboard(session: SessionDoc, quizID: string) {
     return await Quizing.getQuizLeaderboard(new ObjectId(quizID));
@@ -342,7 +408,8 @@ class Routes {
   @Router.get("/prayer-groups")
   async getAllPrayerGroups() {
     const groups = await prayerMate.getAllPrayerGroups();
-    return { msg: "All prayer groups", groups };
+    // return { msg: "All prayer groups", groups };
+    return groups;
   }
 
   @Router.get("/prayer/:groupID")
@@ -394,8 +461,18 @@ class Routes {
   @Router.get("/prayer-group/members/:groupID")
   async getGroupMembers(session: SessionDoc, groupID: string) {
     const groupOid = new ObjectId(groupID);
-    return await prayerMate.getGroupMembers(groupOid);
+    // return await prayerMate.getGroupMembers(groupOid);
+    const members = await prayerMate.getGroupMembers(groupOid);
+    const memberUsernames = await Authing.idsToUsernames(members);
+    return memberUsernames;
   }
+
+  // @Router.delete("/follow/:follower/:following")
+  // async unfollowUser(session: SessionDoc, follower: string, following: string) {
+  //   const followerUser = await Authing.getUserByUsername(follower);
+  //   const followingUser = await Authing.getUserByUsername(following);
+  //   return await Following.unfollowUser(followerUser._id, followingUser._id);
+  // }
 
   // Fetch all active prayer sessions
   @Router.get("/prayer-sessions/active")

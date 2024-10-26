@@ -4,10 +4,12 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import EventsComponent from "../components/EventCalendar/EventsComponent.vue";
 
+import PrayerSessionManager from "../components/PrayerGroup/PrayerSessionManager.vue";
 import FollowComponent from "../components/Following/FollowComponet.vue";
 import FriendComponent from "../components/Friends/FriendComponent.vue";
 import PilgrimageTourComponent from "../components/PilgrimageTour/PilgrimageTourComponent.vue";
 import PrayerMate from "../components/PrayerGroup/PrayerMate.vue"; // Import PrayerMate view
+import Questions from "../components/Quiz/Questions.json";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
@@ -16,6 +18,16 @@ import SettingView from "../views/SettingView.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: "/prayer-session",
+      name: "PrayerSessionManager",
+      component: PrayerSessionManager,
+    },
+    {
+      path: "/questions",
+      name: "Questions",
+      component: Questions,
+    },
     {
       path: "/",
       name: "Home",
